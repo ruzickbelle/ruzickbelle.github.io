@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+   <title>timestampy</title>
+   <link rel="stylesheet" href="exporttimes.css">
+   <script src="exporttimes.js"></script>
+</head>
+
+<body>
+   <h1>timestampy: show timestamps</h1>
+   <p>
+      go to: <a href="index.html">add timestamps</a> <a href="showtimes.html">show timestamps</a>
+   </p><p>
+      <label>delimiter <input type="text" value="|" id="delimiter" /></label>
+      <input type="button" value="export" onclick="exportCSV();" />
+   </p><p id="hint">
+      The exported text as been copied to clipboard.
+   </p><p>
+      <textarea id="output"></textarea>
+   </p>
+</body>
+</html>
+

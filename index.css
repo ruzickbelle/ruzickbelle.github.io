@@ -1,0 +1,19 @@
+html, body {
+   font-family: Arial;
+   font-size: 12pt;
+}
+
+td.fullwidth {
+   width: 100%;
+   padding-right: 1em;
+}
+
+input#descr {
+   width: 100%;
+}
+
+tbody#storage > tr > td.selected {
+   font-weight: bold;
+   background-color: #0f0;
+}
+

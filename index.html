@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+   <title>timestampy</title>
+   <link rel="stylesheet" href="index.css">
+   <script src="index.js"></script>
+</head>
+
+<body>
+   <h1>timestampy: add timestamps</h1>
+   <p>
+      go to: <a href="showtimes.html">show timestamps</a> <a href="exporttimes.html">export timestamps</a>
+   </p><p>
+      <form>
+         <table>
+            <tr>
+               <td class="fullwidth"><input type="text" placeholder="description" id="descr" onclick="smartFillEdit();" /></td>
+               <td><input type="submit" value="stamp" formaction="javascript:addTime();" /></td>
+            </tr>
+         </table>
+      </form>
+   </p><p>
+      <table>
+         <tr>
+            <td>quick edit:</td>
+            <td>
+               <input type="button" value="clear" onclick="quickEditClear();" />
+               <input type="button" value="reset" onclick="quickEditReset();" />
+            </td>
+         </tr><tr>
+            <td>smart fill:</td>
+            <td>
+               <input type="button" value="begin" onclick="smartFill('BEGIN');" />
+               <input type="button" value="pause" onclick="smartFill('PAUSE');" />
+               <input type="button" value="resume" onclick="smartFill('RESUME');" />
+               <input type="button" value="end" onclick="smartFill('END');" />
+            </td>
+         </tr><tr>
+            <td />
+            <td>
+               <input type="button" value="start" onclick="smartFill('START');" />
+               <input type="button" value="update" onclick="smartFill('UPDATE');" />
+               <input type="button" value="done" onclick="smartFill('DONE');" />
+            </td>
+         </tr>
+      </table>
+   </p>
+   <p>
+      <hr />
+      <input type="button" value="load" onclick="storageSetDescr();" />
+      <input type="button" value="append" onclick="storageAppend();" />
+      <input type="button" value="replace" onclick="storageReplace();" />
+      <input type="button" value="remove" onclick="storageRemove();" />
+      <table>
+         <tbody id="storage">
+            <tr><th>smart storage:</th></tr>
+         </tbody>
+      </table>
+      <input type="button" value="move to bottom" onclick="storageMoveToBottom();" />
+      <input type="button" value="clear" onclick="storageClear();" />
+   </p>
+</body>
+</html>
+

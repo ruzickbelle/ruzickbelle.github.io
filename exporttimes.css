@@ -1,0 +1,9 @@
+html, body {
+   font-family: Arial;
+   font-size: 12pt;
+}
+
+p#hint {
+   display: none;
+}
+

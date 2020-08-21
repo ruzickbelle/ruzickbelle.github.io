@@ -1,0 +1,13 @@
+html, body {
+   font-family: Arial;
+   font-size: 12pt;
+}
+
+input#limit {
+   width: 3em;
+}
+
+tbody#table > tr > th + th, tbody#table > tr > td + td {
+   padding-left: 1ex;
+}
+
