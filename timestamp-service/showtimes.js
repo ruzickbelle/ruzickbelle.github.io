@@ -10,15 +10,19 @@ function onLoad() {
 addEventListener('load', onLoad);
 
 function showTimes() {
-   var text = localStorage.getItem("timestamp-service.timeStorage");
-   if (text === null)
-      text = "[]";
-   var data = JSON.parse(text);
+   var data = getData();
    clearTable();
    addToTable(data);
 }
 
 // Functions
+function getData() {
+   var text = localStorage.getItem("timestamp-service.timeStorage");
+   if (text === null)
+      text = "[]";
+   return JSON.parse(text);
+}
+
 function clearTable() {
    while (1 < html_table.children.length)
       html_table.removeChild(html_table.children[1]);

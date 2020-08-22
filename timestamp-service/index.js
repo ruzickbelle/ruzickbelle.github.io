@@ -51,41 +51,41 @@ function smartFill(text) {
    html_descr.value = text + " " + smartFillValue;
 }
 
-function storageLoad() {
-   var text = localStorage.getItem("timestamp-service.addtimes.smartStorage");
+function smartStorageLoad() {
+   var text = localStorage.getItem("timestampy.addtimes.smartStorage");
    if (text === null)
       return;
    var list = JSON.parse(text);
    for (text of list)
-      storageTableRowAppend(text);
+      smartStorageTableRowAppend(text);
 }
 
-function storageSave() {
+function smartStorageSave() {
    var list = [];
-   for (var elem of html_storage.querySelectorAll("tr > td"))
+   for (var elem of html_smartStorage.querySelectorAll("tr > td"))
       list.push(elem.innerText);
    var text = JSON.stringify(list);
-   localStorage.setItem("timestamp-service.addtimes.smartStorage", text);
+   localStorage.setItem("timestampy.addtimes.smartStorage", text);
 }
 
-function storageSelect(event) {
+function smartStorageSelect(event) {
    if (event.target.tagName !== "TD")
       return;
-   for (var cell of html_storage.querySelectorAll("tr > td.selected"))
+   for (var cell of html_smartStorage.querySelectorAll("tr > td.selected"))
       cell.classList.remove("selected");
    event.target.classList.add("selected");
 }
 
-function storageTableRowAppend(text) {
+function smartStorageTableRowAppend(text) {
    var tr = document.createElement("tr");
    var td = document.createElement("td");
    td.innerText = text;
    tr.appendChild(td);
-   html_storage.appendChild(tr);
+   html_smartStorage.appendChild(tr);
 }
 
-function storageSetDescr() {
-   var selected = html_storage.querySelector("tr > td.selected");
+function smartStorageSetDescr() {
+   var selected = html_smartStorage.querySelector("tr > td.selected");
    if (selected === null)
       return;
    var text = selected.innerText;
@@ -93,18 +93,18 @@ function storageSetDescr() {
    smartFillValue = text;
 }
 
-function storageAppend() {
+function smartStorageAppend() {
    var text = smartFillValue;
    if (text === null)
       text = html_descr.value.trim();
    if (text === "")
       return;
-   storageTableRowAppend(text);
-   storageSave();
+   smartStorageTableRowAppend(text);
+   smartStorageSave();
 }
 
-function storageReplace() {
-   var selected = html_storage.querySelector("tr > td.selected");
+function smartStorageReplace() {
+   var selected = html_smartStorage.querySelector("tr > td.selected");
    if (selected === null)
       return;
    var text = smartFillValue;
@@ -113,29 +113,29 @@ function storageReplace() {
    if (text === "")
       return;
    selected.innerText = text;
-   storageSave();
+   smartStorageSave();
 }
 
-function storageRemove() {
-   var selected = html_storage.querySelector("tr > td.selected");
+function smartStorageRemove() {
+   var selected = html_smartStorage.querySelector("tr > td.selected");
    if (selected === null)
       return;
-   html_storage.removeChild(selected.parentElement);
-   storageSave();
+   html_smartStorage.removeChild(selected.parentElement);
+   smartStorageSave();
 }
 
-function storageMoveToBottom() {
-   var selected = html_storage.querySelector("tr > td.selected");
+function smartStorageMoveToBottom() {
+   var selected = html_smartStorage.querySelector("tr > td.selected");
    if (selected === null)
       return;
-   html_storage.appendChild(selected.parentElement);
-   storageSave();
+   html_smartStorage.appendChild(selected.parentElement);
+   smartStorageSave();
 }
 
-function storageClear() {
-   for (var elem of html_storage.querySelectorAll("tr > td"))
-      html_storage.removeChild(elem.parentElement);
-   storageSave();
+function smartStorageClear() {
+   for (var elem of html_smartStorage.querySelectorAll("tr > td"))
+      html_smartStorage.removeChild(elem.parentElement);
+   smartStorageSave();
 }
 
 // Functions
