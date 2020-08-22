@@ -2,15 +2,19 @@
 
 // Events
 var html_descr;
-var html_storage;
+var html_smartStorage;
+var html_predicateStorage;
 var smartFillValue;
 
 function onLoad() {
    html_descr = document.getElementById("descr");
    smartFillValue = null;
-   html_storage = document.getElementById("storage");
-   html_storage.onclick = storageSelect;
-   storageLoad();
+   html_smartStorage = document.getElementById("smartStorage");
+   html_smartStorage.onclick = smartStorageSelect;
+   html_predicateStorage = document.getElementById("predicateStorage");
+   html_predicateStorage.onclick = predicateStorageSelect;
+   smartStorageLoad();
+   predicateStorageLoad();
 }
 addEventListener('load', onLoad);
 
@@ -51,6 +55,7 @@ function smartFill(text) {
    html_descr.value = text + " " + smartFillValue;
 }
 
+// smart storage
 function smartStorageLoad() {
    var text = localStorage.getItem("timestampy.addtimes.smartStorage");
    if (text === null)
@@ -89,6 +94,9 @@ function smartStorageSetDescr() {
    if (selected === null)
       return;
    var text = selected.innerText;
+   var predicate = predicateStorageGetSelected();
+   if (predicate !== null)
+      text += " " + predicate;
    html_descr.value = text;
    smartFillValue = text;
 }
@@ -136,6 +144,98 @@ function smartStorageClear() {
    for (var elem of html_smartStorage.querySelectorAll("tr > td"))
       html_smartStorage.removeChild(elem.parentElement);
    smartStorageSave();
+}
+
+// predicate storage
+function predicateStorageLoad() {
+   var text = localStorage.getItem("timestampy.addtimes.predicateStorage");
+   if (text === null)
+      return;
+   var list = JSON.parse(text);
+   for (text of list)
+      predicateStorageTableRowAppend(text);
+}
+
+function predicateStorageSave() {
+   var list = [];
+   for (var elem of html_predicateStorage.querySelectorAll("tr > td"))
+      list.push(elem.innerText);
+   var text = JSON.stringify(list);
+   localStorage.setItem("timestampy.addtimes.predicateStorage", text);
+}
+
+function predicateStorageSelect(event) {
+   if (event.target.tagName !== "TD")
+      return;
+   for (var cell of html_predicateStorage.querySelectorAll("tr > td.selected"))
+      cell.classList.remove("selected");
+   event.target.classList.add("selected");
+}
+
+function predicateStorageTableRowAppend(text) {
+   var tr = document.createElement("tr");
+   var td = document.createElement("td");
+   td.innerText = text;
+   tr.appendChild(td);
+   html_predicateStorage.appendChild(tr);
+}
+
+function predicateStorageGetSelected() {
+   var selected = html_predicateStorage.querySelector("tr > td.selected");
+   if (selected === null)
+      return null;
+   else
+      return selected.innerText;
+}
+
+function predicateStorageUnselect() {
+   for (var cell of html_predicateStorage.querySelectorAll("tr > td.selected"))
+      cell.classList.remove("selected");
+}
+
+function predicateStorageAppend() {
+   var text = smartFillValue;
+   if (text === null)
+      text = html_descr.value.trim();
+   if (text === "")
+      return;
+   predicateStorageTableRowAppend(text);
+   predicateStorageSave();
+}
+
+function predicateStorageReplace() {
+   var selected = html_predicateStorage.querySelector("tr > td.selected");
+   if (selected === null)
+      return;
+   var text = smartFillValue;
+   if (text === null)
+      text = html_descr.value.trim();
+   if (text === "")
+      return;
+   selected.innerText = text;
+   predicateStorageSave();
+}
+
+function predicateStorageRemove() {
+   var selected = html_predicateStorage.querySelector("tr > td.selected");
+   if (selected === null)
+      return;
+   html_predicateStorage.removeChild(selected.parentElement);
+   predicateStorageSave();
+}
+
+function predicateStorageMoveToBottom() {
+   var selected = html_predicateStorage.querySelector("tr > td.selected");
+   if (selected === null)
+      return;
+   html_predicateStorage.appendChild(selected.parentElement);
+   predicateStorageSave();
+}
+
+function predicateStorageClear() {
+   for (var elem of html_predicateStorage.querySelectorAll("tr > td"))
+      html_predicateStorage.removeChild(elem.parentElement);
+   predicateStorageSave();
 }
 
 // Functions

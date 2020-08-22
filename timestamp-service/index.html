@@ -46,8 +46,7 @@
             </td>
          </tr>
       </table>
-   </p>
-   <p>
+   </p><p>
       <hr />
       <input type="button" value="load" onclick="smartStorageSetDescr();" />
       <input type="button" value="append" onclick="smartStorageAppend();" />
@@ -60,6 +59,18 @@
       </table>
       <input type="button" value="move to bottom" onclick="smartStorageMoveToBottom();" />
       <input type="button" value="clear" onclick="smartStorageClear();" />
+      <hr />
+      <input type="button" value="unselect" onclick="predicateStorageUnselect();" />
+      <input type="button" value="append" onclick="predicateStorageAppend();" />
+      <input type="button" value="replace" onclick="predicateStorageReplace();" />
+      <input type="button" value="remove" onclick="predicateStorageRemove();" />
+      <table>
+         <tbody id="predicateStorage">
+            <tr><th>predicate storage:</th></tr>
+         </tbody>
+      </table>
+      <input type="button" value="move to bottom" onclick="predicateStorageMoveToBottom();" />
+      <input type="button" value="clear" onclick="predicateStorageClear();" />
    </p>
 </body>
 </html>

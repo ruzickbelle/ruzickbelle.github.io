@@ -12,7 +12,7 @@ input#descr {
    width: 100%;
 }
 
-tbody#smartStorage > tr > td.selected {
+tbody#smartStorage > tr > td.selected, tbody#predicateStorage > tr > td.selected {
    font-weight: bold;
    background-color: #0f0;
 }
