@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <meta charset="UTF-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Legenden von Andor</title>
+   <style>
+html, body {
+   font-family: Arial;
+}
+
+input.number {
+   font-family: Arial;
+   width: 3ex;
+   -moz-appearance: textfield;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input.button {
+   font-family: Arial;
+   padding-left: 3pt;
+   padding-right: 3pt;
+}
+
+@media only screen and (max-width: 600px) {
+   html, body {
+      font-size: 12px;
+   }
+
+   input.button {
+      font-size: 10px;
+      padding: 2px;
+   }
+}
+
+span.error {
+   color: red;
+   font-weight: bold;
+}
+
+table {
+   border-spacing: 0;
+}
+
+table.form tr td {
+   white-space: nowrap;
+   font-weight: bold;
+}
+
+table.form tr td + td {
+   font-weight: normal;
+}
+
+table.form tr td + td + td + td + td + td {
+   border-left: 1px solid black;
+   border-right: 1px solid black;
+}
+
+table.form tr td + td + td + td + td + td + td {
+   border-left: none;
+   border-right: none;
+}
+
+table.info tr td {
+   white-space: nowrap;
+   padding: 0pt 4pt 0pt 4pt;
+}
+
+table.list tr td {
+   text-align: right;
+}
+
+table.list tr td + td + td {
+   text-align: left;
+}
+
+table.table tr td {
+   text-align: right;
+}
+   </style>
+   <script>
+"use strict";
+
+// Events
+var DISY = "";
+var DISN = "display: none;";
+var mode = undefined;
+var enemyAdvanced = false;
+var html_playerCount;
+var html_confView;
+var html_predView;
+var html_calcView;
+var html_playerBonus;
+var html_enemyBonus;
+var html_predcols;
+var html_calccols;
+var html_player1;
+var html_player1Name;
+var html_player1Strength;
+var html_pred1Part;
+var html_pred1DiceCount;
+var html_pred1Potion;
+var html_calc1DiceScore;
+var html_player2;
+var html_player2Name;
+var html_player2Strength;
+var html_pred2Part;
+var html_pred2DiceCount;
+var html_pred2Potion;
+var html_calc2DiceScore;
+var html_player3;
+var html_player3Name;
+var html_player3Strength;
+var html_pred3Part;
+var html_pred3DiceCount;
+var html_pred3Potion;
+var html_calc3DiceScore;
+var html_player4;
+var html_player4Name;
+var html_player4Strength;
+var html_pred4Part;
+var html_pred4DiceCount;
+var html_pred4Potion;
+var html_calc4DiceScore;
+var html_player5;
+var html_player5Name;
+var html_player5Strength;
+var html_pred5Part;
+var html_pred5DiceCount;
+var html_pred5Potion;
+var html_calc5DiceScore;
+var html_player6;
+var html_player6Name;
+var html_player6Strength;
+var html_pred6Part;
+var html_pred6DiceCount;
+var html_pred6Potion;
+var html_calc6DiceScore;
+var html_enemyAdvanceds;
+var html_enemy;
+var html_enemyStrength;
+var html_predEnemyDiceCount;
+var html_predEnemyPotion;
+var html_calcEnemyDiceScore;
+var html_output;
+
+function onLoad() {
+   html_playerCount        = document.getElementById("playerCount");
+   html_confView           = document.getElementById("confView");
+   html_predView           = document.getElementById("predView");
+   html_calcView           = document.getElementById("calcView");
+   html_playerBonus        = document.getElementById("playerBonus");
+   html_enemyBonus         = document.getElementById("enemyBonus");
+   html_predcols           = document.getElementsByClassName("pred");
+   html_calccols           = document.getElementsByClassName("calc");
+   html_player1            = document.getElementById("player1");
+   html_player1Name        = document.getElementById("player1Name");
+   html_player1Strength    = document.getElementById("player1Strength");
+   html_pred1Part          = document.getElementById("pred1Part");
+   html_pred1DiceCount     = document.getElementById("pred1DiceCount");
+   html_pred1Potion        = document.getElementById("pred1Potion");
+   html_calc1DiceScore     = document.getElementById("calc1DiceScore");
+   html_player2            = document.getElementById("player2");
+   html_player2Name        = document.getElementById("player2Name");
+   html_player2Strength    = document.getElementById("player2Strength");
+   html_pred2Part          = document.getElementById("pred2Part");
+   html_pred2DiceCount     = document.getElementById("pred2DiceCount");
+   html_pred2Potion        = document.getElementById("pred2Potion");
+   html_calc2DiceScore     = document.getElementById("calc2DiceScore");
+   html_player3            = document.getElementById("player3");
+   html_player3Name        = document.getElementById("player3Name");
+   html_player3Strength    = document.getElementById("player3Strength");
+   html_pred3Part          = document.getElementById("pred3Part");
+   html_pred3DiceCount     = document.getElementById("pred3DiceCount");
+   html_pred3Potion        = document.getElementById("pred3Potion");
+   html_calc3DiceScore     = document.getElementById("calc3DiceScore");
+   html_player4            = document.getElementById("player4");
+   html_player4Name        = document.getElementById("player4Name");
+   html_player4Strength    = document.getElementById("player4Strength");
+   html_pred4Part          = document.getElementById("pred4Part");
+   html_pred4DiceCount     = document.getElementById("pred4DiceCount");
+   html_pred4Potion        = document.getElementById("pred4Potion");
+   html_calc4DiceScore     = document.getElementById("calc4DiceScore");
+   html_player5            = document.getElementById("player5");
+   html_player5Name        = document.getElementById("player5Name");
+   html_player5Strength    = document.getElementById("player5Strength");
+   html_pred5Part          = document.getElementById("pred5Part");
+   html_pred5DiceCount     = document.getElementById("pred5DiceCount");
+   html_pred5Potion        = document.getElementById("pred5Potion");
+   html_calc5DiceScore     = document.getElementById("calc5DiceScore");
+   html_player6            = document.getElementById("player6");
+   html_player6Name        = document.getElementById("player6Name");
+   html_player6Strength    = document.getElementById("player6Strength");
+   html_pred6Part          = document.getElementById("pred6Part");
+   html_pred6DiceCount     = document.getElementById("pred6DiceCount");
+   html_pred6Potion        = document.getElementById("pred6Potion");
+   html_calc6DiceScore     = document.getElementById("calc6DiceScore");
+   html_enemyAdvanceds     = document.getElementsByClassName("enemyAdvanced");
+   html_enemy              = document.getElementById("enemy");
+   html_enemyStrength      = document.getElementById("enemyStrength");
+   html_predEnemyDiceCount = document.getElementById("predEnemyDiceCount");
+   html_predEnemyPotion    = document.getElementById("predEnemyPotion");
+   html_calcEnemyDiceScore = document.getElementById("calcEnemyDiceScore");
+   html_output             = document.getElementById("output");
+   html_confView.style = DISN;
+   html_predView.style = DISN;
+   html_calcView.style = DISN;
+   for (var html_predcol of html_predcols)
+      html_predcol.style = DISN;
+   for (var html_calccol of html_calccols)
+      html_calccol.style = DISN;
+   html_player1.style = DISN;
+   html_player2.style = DISN;
+   html_player3.style = DISN;
+   html_player4.style = DISN;
+   html_player5.style = DISN;
+   html_player6.style = DISN;
+   for (var html_enemyAdvanced of html_enemyAdvanceds)
+      html_enemyAdvanced.style = DISN;
+}
+addEventListener('load', onLoad);
+
+// Library
+function getDispStyle(show) {
+   if (show)
+      return DISY;
+   else
+      return DISN;
+}
+
+function parseIntWr(inp) {
+   var ret = parseInt(inp);
+   if (isNaN(ret))
+      return 0;
+   else
+      return ret;
+}
+
+function parseFloatWr(inp) {
+   var ret = parseFloat(inp);
+   if (isNaN(ret))
+      return 0;
+   else
+      return ret;
+}
+
+function emitErr(msg) {
+   html_output.innerHTML = "<span class=\"error\">" + msg + "</span>";
+}
+
+// Functions
+function showPlayers() {
+   var playerCount = parseIntWr(html_playerCount.value);
+   html_player1.style = getDispStyle(playerCount >= 1);
+   html_player2.style = getDispStyle(playerCount >= 2);
+   html_player3.style = getDispStyle(playerCount >= 3);
+   html_player4.style = getDispStyle(playerCount >= 4);
+   html_player5.style = getDispStyle(playerCount >= 5);
+   html_player6.style = getDispStyle(playerCount >= 6);
+}
+
+function showPredictionView() {
+   mode = "pred";
+   html_confView.style = DISN;
+   html_predView.style = DISY;
+   html_calcView.style = DISN;
+   showPlayers();
+   for (var html_predcol of html_predcols)
+      if (enemyAdvanced || !html_predcol.classList.contains("enemyAdvanced"))
+         html_predcol.style = DISY;
+   for (var html_calccol of html_calccols)
+      html_calccol.style = DISN;
+   html_pred1Part.checked = false;
+   html_pred2Part.checked = false;
+   html_pred3Part.checked = false;
+   html_pred4Part.checked = false;
+   html_pred5Part.checked = false;
+   html_pred6Part.checked = false;
+   html_pred1Potion.checked = false;
+   html_pred2Potion.checked = false;
+   html_pred3Potion.checked = false;
+   html_pred4Potion.checked = false;
+   html_pred5Potion.checked = false;
+   html_pred6Potion.checked = false;
+   html_predEnemyPotion.checked = false;
+}
+
+function showCalculationView() {
+   mode = "calc";
+   html_confView.style = DISN;
+   html_predView.style = DISN;
+   html_calcView.style = DISY;
+   showPlayers();
+   for (var html_predcol of html_predcols)
+      html_predcol.style = DISN;
+   for (var html_calccol of html_calccols)
+      if (enemyAdvanced || !html_calccol.classList.contains("enemyAdvanced"))
+         html_calccol.style = DISY;
+   html_calc1DiceScore.value = "";
+   html_calc2DiceScore.value = "";
+   html_calc3DiceScore.value = "";
+   html_calc4DiceScore.value = "";
+   html_calc5DiceScore.value = "";
+   html_calc6DiceScore.value = "";
+   html_calcEnemyDiceScore.value = "";
+}
+
+function showConfigurationView() {
+   html_confView.style = DISY;
+}
+
+function submitConfiguration() {
+   html_confView.style = DISN;
+   html_player1Name.innerHTML = html_confView.children[0].value;
+   html_player2Name.innerHTML = html_confView.children[2].value;
+   html_player3Name.innerHTML = html_confView.children[4].value;
+   html_player4Name.innerHTML = html_confView.children[6].value;
+   html_player5Name.innerHTML = html_confView.children[8].value;
+   html_player6Name.innerHTML = html_confView.children[10].value;
+   enemyAdvanced = html_confView.children[12].control.checked;
+   if (enemyAdvanced) {
+      for (var html_enemyAdvanced of html_enemyAdvanceds) {
+         var lst = html_enemyAdvanced.classList;
+         if (lst.contains("any") || lst.contains(mode))
+            html_enemyAdvanced.style = DISY;
+      }
+   } else {
+      for (var html_enemyAdvanced of html_enemyAdvanceds)
+         html_enemyAdvanced.style = DISN;
+   }
+}
+
+function calc() {
+   switch (mode) {
+      case "pred":
+         calcPrediction();
+         break;
+      case "calc":
+         calcCalculation();
+         break;
+      default:
+         emitErr("Nothing to calculate.");
+         break;
+   }
+}
+
+function setCalcResults(playerScore, enemyScore) {
+   if (isNaN(playerScore) || isNaN(enemyScore))
+      return;
+   var text = "Player score: " + playerScore + "<br />Enemy score: " + enemyScore + "<br />";
+   if (playerScore > enemyScore)
+      text += "Enemy takes " + (playerScore - enemyScore) + " damage.";
+   else if (playerScore == enemyScore)
+      text += "No damage dealt.";
+   else
+      text += "All players take " + (enemyScore - playerScore) + " damage.";
+   html_output.innerHTML = text;
+}
+
+function calcPrediction_getExpValForPlayer(html_player, html_playerStrength, html_predPart, html_predDiceCount, html_predPotion, name) {
+   if (!html_predPart.checked)
+      return 0;
+   var dicetype = html_player.querySelector("input.radio[name=\"" + name + "DiceType\"]:checked").value;
+   var scoring = html_player.querySelector("input.radio[name=\"" + name + "Scoring\"]:checked").value;
+   var expval = getExpVal(dicetype, parseIntWr(html_predDiceCount.value), scoring);
+   if (html_predPotion.checked)
+      expval *= 2;
+   return parseFloatWr(html_playerStrength.value) + expval;
+}
+
+function calcPrediction_getExpValForEnemy() {
+   var dicetype = html_enemy.querySelector("input.radio[name=\"predEnemyDiceType\"]:checked").value;
+   var scoring = html_enemy.querySelector("input.radio[name=\"predEnemyScoring\"]:checked").value;
+   var expval = getExpVal(dicetype, parseIntWr(html_predEnemyDiceCount.value), scoring);
+   if (html_predEnemyPotion.checked)
+      expval *= 2;
+   return parseFloatWr(html_enemyStrength.value) + expval;
+}
+
+function calcPrediction() {
+   var playerScore = parseFloatWr(html_playerBonus.value)
+      + calcPrediction_getExpValForPlayer(html_player1, html_player1Strength, html_pred1Part, html_pred1DiceCount, html_pred1Potion, "pred1")
+      + calcPrediction_getExpValForPlayer(html_player2, html_player2Strength, html_pred2Part, html_pred2DiceCount, html_pred2Potion, "pred2")
+      + calcPrediction_getExpValForPlayer(html_player3, html_player3Strength, html_pred3Part, html_pred3DiceCount, html_pred3Potion, "pred3")
+      + calcPrediction_getExpValForPlayer(html_player4, html_player4Strength, html_pred4Part, html_pred4DiceCount, html_pred4Potion, "pred4")
+      + calcPrediction_getExpValForPlayer(html_player5, html_player5Strength, html_pred5Part, html_pred5DiceCount, html_pred5Potion, "pred5")
+      + calcPrediction_getExpValForPlayer(html_player6, html_player6Strength, html_pred6Part, html_pred6DiceCount, html_pred6Potion, "pred6");
+   var enemyScore = parseFloatWr(html_enemyBonus.value) + calcPrediction_getExpValForEnemy();
+   setCalcResults(playerScore, enemyScore);
+}
+
+function calcPrediction_getSumForPlayer(html_playerStrength, html_calcDiceScore) {
+   var diceScore = html_calcDiceScore.value;
+   if (diceScore == "")
+      return 0;
+   return parseFloatWr(html_playerStrength.value) + parseFloatWr(diceScore);
+}
+
+function calcCalculation() {
+   var playerScore = parseFloatWr(html_playerBonus.value)
+      + calcPrediction_getSumForPlayer(html_player1Strength, html_calc1DiceScore)
+      + calcPrediction_getSumForPlayer(html_player2Strength, html_calc2DiceScore)
+      + calcPrediction_getSumForPlayer(html_player3Strength, html_calc3DiceScore)
+      + calcPrediction_getSumForPlayer(html_player4Strength, html_calc4DiceScore)
+      + calcPrediction_getSumForPlayer(html_player5Strength, html_calc5DiceScore)
+      + calcPrediction_getSumForPlayer(html_player6Strength, html_calc6DiceScore);
+   var enemyScore = parseFloatWr(html_enemyBonus.value)
+      + parseFloatWr(html_enemyStrength.value) + parseFloatWr(html_calcEnemyDiceScore.value);
+   setCalcResults(playerScore, enemyScore);
+}
+
+function resetRadioButtons(html_player) {
+   var elems = html_player.getElementsByClassName("radio");
+   elems[0].checked = true;
+   // elems[1].checked = false;
+   // elems[2].checked = false;
+   elems[3].checked = true;
+   // elems[4].checked = false;
+   // elems[5].checked = false;
+}
+
+function resetEnemyRadioButtons() {
+   var elems = html_enemy.getElementsByClassName("radio");
+   elems[0].checked = true;
+   // elems[1].checked = false;
+   // elems[2].checked = false;
+   // elems[3].checked = false;
+   // elems[4].checked = false;
+   elems[5].checked = true;
+}
+
+function resetAllFields() {
+   // html_confView.style = DISN;
+   // html_predView.style = DISN;
+   // html_calcView.style = DISN;
+   html_playerBonus.value = "";
+   html_enemyBonus.value = "";
+   html_player1Strength.value = "";
+   html_pred1Part.checked = false;
+   html_pred1DiceCount.value = "";
+   resetRadioButtons(html_player1);
+   html_pred1Potion.checked = false;
+   html_calc1DiceScore.value = "";
+   html_player2Strength.value = "";
+   html_pred2Part.checked = false;
+   html_pred2DiceCount.value = "";
+   resetRadioButtons(html_player2);
+   html_pred2Potion.checked = false;
+   html_calc2DiceScore.value = "";
+   html_player3Strength.value = "";
+   html_pred3Part.checked = false;
+   html_pred3DiceCount.value = "";
+   resetRadioButtons(html_player3);
+   html_pred3Potion.checked = false;
+   html_calc3DiceScore.value = "";
+   html_player4Strength.value = "";
+   html_pred4Part.checked = false;
+   html_pred4DiceCount.value = "";
+   resetRadioButtons(html_player4);
+   html_pred4Potion.checked = false;
+   html_calc4DiceScore.value = "";
+   html_player5Strength.value = "";
+   html_pred5Part.checked = false;
+   html_pred5DiceCount.value = "";
+   resetRadioButtons(html_player5);
+   html_pred5Potion.checked = false;
+   html_calc5DiceScore.value = "";
+   html_player6Strength.value = "";
+   html_pred6Part.checked = false;
+   html_pred6DiceCount.value = "";
+   resetRadioButtons(html_player6);
+   html_pred6Potion.checked = false;
+   html_calc6DiceScore.value = "";
+   html_enemyStrength.value = "";
+   html_predEnemyDiceCount.value = "";
+   resetEnemyRadioButtons();
+   html_predEnemyPotion.checked = false;
+   html_calcEnemyDiceScore.value = "";
+   html_output.innerHTML = "";
+}
+
+function resetBonusFields() {
+   html_playerBonus.value = "";
+   html_enemyBonus.value = "";
+}
+
+function resetEnemyFields() {
+   html_enemyStrength.value = "";
+   html_predEnemyDiceCount.value = "";
+   resetEnemyRadioButtons();
+   html_predEnemyPotion.checked = false;
+   html_calcEnemyDiceScore.value = "";
+}
+
+function getExpVal(dicetype, dicecount, scoring) {
+   switch (dicetype) {
+      case "normal":
+         switch (scoring) {
+            case "max":
+               switch (dicecount) {
+                  case 0:
+                     return 0;
+                  case 1:
+                     return 3.50000000000;
+                  case 2:
+                     return 4.47222222222;
+                  case 3:
+                     return 4.95833333333;
+                  case 4:
+                     return 5.24459876543;
+                  case 5:
+                     return 5.43094135802;
+                  case 6:
+                     return 5.56029235254;
+                  case 7:
+                     return 5.65411736968;
+                  case 8:
+                     return 5.72435425716;
+                  case 9:
+                     return 5.77817697617;
+                  case 10:
+                     return 5.82015937307;
+                  default:
+                     emitErr("Expected value for dice count not calculated.");
+                     return undefined;
+               }
+            case "choose":
+               switch (dicecount) {
+                  case 0:
+                     return 0;
+                  case 1:
+                     return 3.50000000000;
+                  case 2:
+                     return 4.25000000000;
+                  case 3:
+                     return 4.66666666667;
+                  case 4:
+                     return 4.94444444444;
+                  case 5:
+                     return 5.12962962963;
+                  case 6:
+                     return 5.27469135802;
+                  case 7:
+                     return 5.39557613169;
+                  case 8:
+                     return 5.49631344307;
+                  case 9:
+                     return 5.58026120256;
+                  case 10:
+                     return 5.65021766880;
+                  default:
+                     emitErr("Expected value for dice count not calculated.");
+                     return undefined;
+               }
+            case "sum":
+               switch (dicecount) {
+                  case 0:
+                     return 0;
+                  case 1:
+                     return 3.50000000000;
+                  case 2:
+                     return 5.05555555556;
+                  case 3:
+                     return 6.30555555556;
+                  case 4:
+                     return 7.52777777778;
+                  case 5:
+                     return 8.75385802469;
+                  case 6:
+                     return 9.97646604938;
+                  case 7:
+                     return 11.18090563557;
+                  case 8:
+                     return 12.36039189910;
+                  case 9:
+                     return 13.51372724480;
+                  case 10:
+                     return 14.64537777286;
+                  default:
+                     emitErr("Expected value for dice count not calculated.");
+                     return undefined;
+               }
+            default:
+               emitErr("Internal error: Unknown scoring type: \"" + scoring + "\".");
+               return undefined;
+         }
+      case "black":
+         switch (scoring) {
+            case "max":
+               switch (dicecount) {
+                  case 0:
+                     return 0;
+                  case 1:
+                     return 8.66666666667;
+                  case 2:
+                     return 9.88888888889;
+                  case 3:
+                     return 10.51851851852;
+                  case 4:
+                     return 10.88580246914;
+                  case 5:
+                     return 11.12551440329;
+                  case 6:
+                     return 11.29621056241;
+                  case 7:
+                     return 11.42529721079;
+                  case 8:
+                     return 11.52674658970;
+                  case 9:
+                     return 11.60837874054;
+                  case 10:
+                     return 11.67500183904;
+                  default:
+                     emitErr("Expected value for dice count not calculated.");
+                     return undefined;
+               }
+            case "choose":
+               switch (dicecount) {
+                  case 0:
+                     return 0;
+                  case 1:
+                     return 8.66666666667;
+                  case 2:
+                     return 9.66666666667;
+                  case 3:
+                     return 10.16666666667;
+                  case 4:
+                     return 10.47222222222;
+                  case 5:
+                     return 10.72685185185;
+                  case 6:
+                     return 10.93904320988;
+                  case 7:
+                     return 11.11586934156;
+                  case 8:
+                     return 11.26322445130;
+                  case 9:
+                     return 11.38602037609;
+                  case 10:
+                     return 11.48835031340;
+                  default:
+                     emitErr("Expected value for dice count not calculated.");
+                     return undefined;
+               }
+            case "sum":
+               switch (dicecount) {
+                  case 0:
+                     return 0;
+                  case 1:
+                     return 8.66666666667;
+                  case 2:
+                     return 12.22222222222;
+                  case 3:
+                     return 15.72222222222;
+                  case 4:
+                     return 19.44444444444;
+                  case 5:
+                     return 23.14557613169;
+                  case 6:
+                     return 26.63888888889;
+                  case 7:
+                     return 30.00995941930;
+                  case 8:
+                     return 33.36375933547;
+                  case 9:
+                     return 36.69311199703;
+                  case 10:
+                     return 40.02134217980;
+                  default:
+                     emitErr("Expected value for dice count not calculated.");
+                     return undefined;
+               }
+            default:
+               emitErr("Internal error: Unknown scoring type: \"" + scoring + "\".");
+               return undefined;
+         }
+      case "white":
+         switch (scoring) {
+            case "max":
+               switch (dicecount) {
+                  case 0:
+                     return 0;
+                  case 1:
+                     return 5.50000000000;
+                  default:
+                     emitErr("Expected value for dice count not calculated.");
+                     return undefined;
+               }
+            case "choose":
+               switch (dicecount) {
+                  case 0:
+                     return 0;
+                  case 1:
+                     return 5.50000000000;
+                  default:
+                     emitErr("Expected value for dice count not calculated.");
+                     return undefined;
+               }
+            case "sum":
+               switch (dicecount) {
+                  case 0:
+                     return 0;
+                  case 1:
+                     return 5.50000000000;
+                  default:
+                     emitErr("Expected value for dice count not calculated.");
+                     return undefined;
+               }
+            default:
+               emitErr("Internal error: Unknown scoring type: \"" + scoring + "\".");
+               return undefined;
+         }
+      default:
+         emitErr("Internal error: Unknown dice type: \"" + dicetype + "\".");
+         return undefined;
+   }
+}
+   </script>
+</head>
+
+<body>
+   <h1>Legenden von Andor</h1>
+   <p>
+      <label>Player Count <input type="number" id="playerCount" class="number" /></label>
+      <input type="button" class="button" value="pred" onclick="showPredictionView();" />
+      <input type="button" class="button" value="calc" onclick="showCalculationView();" />
+      <input type="button" class="button" value="conf" onclick="showConfigurationView();" />
+      <input type="button" class="button" value="reset" onclick="resetAllFields();" />
+   </p>
+   <p>
+      <div id="confView">
+         <input type="text" value="P1" /><br />
+         <input type="text" value="P2" /><br />
+         <input type="text" value="P3" /><br />
+         <input type="text" value="P4" /><br />
+         <input type="text" value="P5" /><br />
+         <input type="text" value="P6" /><br />
+         <label>Show advanced options for enemy score prediction <input type="checkbox" /></label><br />
+         <input type="button" class="button" value="submit" onclick="submitConfiguration();" />
+      </div>
+      <div>
+         <span class="name">Bonus</span>
+         <label>Player <input type="number" id="playerBonus" class="number" /></label>&ensp;
+         <label>Enemy <input type="number" id="enemyBonus" class="number" /></label>
+         <input type="button" class="button" value="R" onclick="resetBonusFields();" />
+      </div>
+      <table class="form">
+         <tr>
+            <th />
+            <th>s</th>
+            <th class="pred">tp</th>
+            <th class="pred">#d</th>
+            <th class="pred">n/b/w</th>
+            <th class="pred">m/c/s</th>
+            <th class="pred">p</th>
+            <th class="calc">ds</th>
+         </tr>
+         <tr id="player1">
+            <td id="player1Name" class="name">P1</td>
+            <td><input type="number" id="player1Strength" class="number" /></td>
+            <td class="pred"><input type="checkbox" id="pred1Part" /></td>
+            <td class="pred"><input type="number" id="pred1DiceCount" class="number" /></td>
+            <td class="pred">
+               <input type="radio" class="radio" name="pred1DiceType" value="normal" checked="true" />
+               <input type="radio" class="radio" name="pred1DiceType" value="black" />
+               <input type="radio" class="radio" name="pred1DiceType" value="white" />
+            </td>
+            <td class="pred">
+               <input type="radio" class="radio" name="pred1Scoring" value="max" checked="true" />
+               <input type="radio" class="radio" name="pred1Scoring" value="choose" />
+               <input type="radio" class="radio" name="pred1Scoring" value="sum" />
+            </td>
+            <td class="pred"><input type="checkbox" id="pred1Potion" /></td>
+            <td class="calc"><input type="number" id="calc1DiceScore" class="number" /></td>
+         </tr>
+         <tr id="player2">
+            <td id="player2Name" class="name">P2</td>
+            <td><input type="number" id="player2Strength" class="number" /></td>
+            <td class="pred"><input type="checkbox" id="pred2Part" /></td>
+            <td class="pred"><input type="number" id="pred2DiceCount" class="number" /></td>
+            <td class="pred">
+               <input type="radio" class="radio" name="pred2DiceType" value="normal" checked="true" />
+               <input type="radio" class="radio" name="pred2DiceType" value="black" />
+               <input type="radio" class="radio" name="pred2DiceType" value="white" />
+            </td>
+            <td class="pred">
+               <input type="radio" class="radio" name="pred2Scoring" value="max" checked="true" />
+               <input type="radio" class="radio" name="pred2Scoring" value="choose" />
+               <input type="radio" class="radio" name="pred2Scoring" value="sum" />
+            </td>
+            <td class="pred"><input type="checkbox" id="pred2Potion" /></td>
+            <td class="calc"><input type="number" id="calc2DiceScore" class="number" /></td>
+         </tr>
+         <tr id="player3">
+            <td id="player3Name" class="name">P3</td>
+            <td><input type="number" id="player3Strength" class="number" /></td>
+            <td class="pred"><input type="checkbox" id="pred3Part" /></td>
+            <td class="pred"><input type="number" id="pred3DiceCount" class="number" /></td>
+            <td class="pred">
+               <input type="radio" class="radio" name="pred3DiceType" value="normal" checked="true" />
+               <input type="radio" class="radio" name="pred3DiceType" value="black" />
+               <input type="radio" class="radio" name="pred3DiceType" value="white" />
+            </td>
+            <td class="pred">
+               <input type="radio" class="radio" name="pred3Scoring" value="max" checked="true" />
+               <input type="radio" class="radio" name="pred3Scoring" value="choose" />
+               <input type="radio" class="radio" name="pred3Scoring" value="sum" />
+            </td>
+            <td class="pred"><input type="checkbox" id="pred3Potion" /></td>
+            <td class="calc"><input type="number" id="calc3DiceScore" class="number" /></td>
+         </tr>
+         <tr id="player4">
+            <td id="player4Name" class="name">P4</td>
+            <td><input type="number" id="player4Strength" class="number" /></td>
+            <td class="pred"><input type="checkbox" id="pred4Part" /></td>
+            <td class="pred"><input type="number" id="pred4DiceCount" class="number" /></td>
+            <td class="pred">
+               <input type="radio" class="radio" name="pred4DiceType" value="normal" checked="true" />
+               <input type="radio" class="radio" name="pred4DiceType" value="black" />
+               <input type="radio" class="radio" name="pred4DiceType" value="white" />
+            </td>
+            <td class="pred">
+               <input type="radio" class="radio" name="pred4Scoring" value="max" checked="true" />
+               <input type="radio" class="radio" name="pred4Scoring" value="choose" />
+               <input type="radio" class="radio" name="pred4Scoring" value="sum" />
+            </td>
+            <td class="pred"><input type="checkbox" id="pred4Potion" /></td>
+            <td class="calc"><input type="number" id="calc4DiceScore" class="number" /></td>
+         </tr>
+         <tr id="player5">
+            <td id="player5Name" class="name">P5</td>
+            <td><input type="number" id="player5Strength" class="number" /></td>
+            <td class="pred"><input type="checkbox" id="pred5Part" /></td>
+            <td class="pred"><input type="number" id="pred5DiceCount" class="number" /></td>
+            <td class="pred">
+               <input type="radio" class="radio" name="pred5DiceType" value="normal" checked="true" />
+               <input type="radio" class="radio" name="pred5DiceType" value="black" />
+               <input type="radio" class="radio" name="pred5DiceType" value="white" />
+            </td>
+            <td class="pred">
+               <input type="radio" class="radio" name="pred5Scoring" value="max" checked="true" />
+               <input type="radio" class="radio" name="pred5Scoring" value="choose" />
+               <input type="radio" class="radio" name="pred5Scoring" value="sum" />
+            </td>
+            <td class="pred"><input type="checkbox" id="pred5Potion" /></td>
+            <td class="calc"><input type="number" id="calc5DiceScore" class="number" /></td>
+         </tr>
+         <tr id="player6">
+            <td id="player6Name" class="name">P6</td>
+            <td><input type="number" id="player6Strength" class="number" /></td>
+            <td class="pred"><input type="checkbox" id="pred6Part" /></td>
+            <td class="pred"><input type="number" id="pred6DiceCount" class="number" /></td>
+            <td class="pred">
+               <input type="radio" class="radio" name="pred6DiceType" value="normal" checked="true" />
+               <input type="radio" class="radio" name="pred6DiceType" value="black" />
+               <input type="radio" class="radio" name="pred6DiceType" value="white" />
+            </td>
+            <td class="pred">
+               <input type="radio" class="radio" name="pred6Scoring" value="max" checked="true" />
+               <input type="radio" class="radio" name="pred6Scoring" value="choose" />
+               <input type="radio" class="radio" name="pred6Scoring" value="sum" />
+            </td>
+            <td class="pred"><input type="checkbox" id="pred6Potion" /></td>
+            <td class="calc"><input type="number" id="calc6DiceScore" class="number" /></td>
+         </tr>
+         <tr id="enemy">
+            <td class="name">Enemy</td>
+            <td><input type="number" id="enemyStrength" class="number" /></td>
+            <td class="pred" />
+            <td class="pred"><input type="number" id="predEnemyDiceCount" class="number" /></td>
+            <td class="pred">
+               <input type="radio" class="radio" name="predEnemyDiceType" value="normal" checked="true" />
+               <input type="radio" class="radio" name="predEnemyDiceType" value="black" />
+               <input type="radio" class="radio" name="predEnemyDiceType" value="white" />
+            </td>
+            <td class="pred">
+               <span class="any enemyAdvanced">
+                  <input type="radio" class="radio" name="predEnemyScoring" value="max" />
+                  <input type="radio" class="radio" name="predEnemyScoring" value="choose" />
+                  <input type="radio" class="radio" name="predEnemyScoring" value="sum" checked="true" />
+               </span>
+            </td>
+            <td class="pred enemyAdvanced">
+               <input type="checkbox" id="predEnemyPotion" />
+            </td>
+            <td class="calc"><input type="number" id="calcEnemyDiceScore" class="number" /></td>
+            <td><input type="button" class="button" value="R" onclick="resetEnemyFields();" /></td>
+         </tr>
+      </table>
+      <input type="button" class="button" value="calc" onclick="calc();" />
+   </p>
+   <p>
+      <div id="predView">
+         <b>s</b>trength<br />
+         <b>t</b>akes <b>p</b>art in this fight<br />
+         <b>#</b> number of <b>d</b>ice<br />
+         <b>n</b>ormal/<b>b</b>lack/<b>w</b>hite dice type<br />
+         <b>m</b>ax (normal)/<b>c</b>hoose (bow)/<b>s</b>um (helmet/enemy) scoring type<br />
+         use <b>p</b>otion
+      </div>
+      <div id="calcView">
+         <b>s</b>trength<br />
+         <b>d</b>ice <b>s</b>core<br />
+         Only players with a non-empty Dice Score field will be counted. All other players are considered to not take part in this fight. (Enemy will always be summed.)
+      </div>
+   </p>
+   <p>
+      <div id="output"></div>
+   </p>
+   <hr />
+<h2>normal dice</h2>
+<h3>Best choose thresholds:</h3>
+<table class="info list">
+<tr><th>#d</th><th>thresholds</th><th>expected value</th></tr>
+<tr><td>2</td><td>(4, 1)</td><td>4.25</td></tr>
+<tr><td>3</td><td>(5, 4, 1)</td><td>4.666666666666667</td></tr>
+<tr><td>4</td><td>(5, 5, 4, 1)</td><td>4.944444444444445</td></tr>
+<tr><td>5</td><td>(5, 5, 5, 4, 1)</td><td>5.12962962962963</td></tr>
+<tr><td>6</td><td>(6, 5, 5, 5, 4, 1)</td><td>5.2746913580246915</td></tr>
+<tr><td>7</td><td>(6, 6, 5, 5, 5, 4, 1)</td><td>5.395576131687243</td></tr>
+<tr><td>8</td><td>(6, 6, 6, 5, 5, 5, 4, 1)</td><td>5.496313443072703</td></tr>
+<tr><td>9</td><td>(6, 6, 6, 6, 5, 5, 5, 4, 1)</td><td>5.580261202560585</td></tr>
+<tr><td>10</td><td>(6, 6, 6, 6, 6, 5, 5, 5, 4, 1)</td><td>5.6502176688004875</td></tr>
+</table>
+<h3>Expected values:</h3>
+<table class="info table">
+<tr><th>#dices</th><th>max</th><th>choose</th><th>sum</th></tr>
+<tr><td>1</td><td>3.50000000000</td><td>3.50000000000</td><td>3.50000000000</td></tr>
+<tr><td>2</td><td>4.47222222222</td><td>4.25000000000</td><td>5.05555555556</td></tr>
+<tr><td>3</td><td>4.95833333333</td><td>4.66666666667</td><td>6.30555555556</td></tr>
+<tr><td>4</td><td>5.24459876543</td><td>4.94444444444</td><td>7.52777777778</td></tr>
+<tr><td>5</td><td>5.43094135802</td><td>5.12962962963</td><td>8.75385802469</td></tr>
+<tr><td>6</td><td>5.56029235254</td><td>5.27469135802</td><td>9.97646604938</td></tr>
+<tr><td>7</td><td>5.65411736968</td><td>5.39557613169</td><td>11.18090563557</td></tr>
+<tr><td>8</td><td>5.72435425716</td><td>5.49631344307</td><td>12.36039189910</td></tr>
+<tr><td>9</td><td>5.77817697617</td><td>5.58026120256</td><td>13.51372724480</td></tr>
+<tr><td>10</td><td>5.82015937307</td><td>5.65021766880</td><td>14.64537777286</td></tr>
+</table>
+<h2>black dice</h2>
+<h3>Best choose thresholds:</h3>
+<table class="info list">
+<tr><th>#d</th><th>thresholds</th><th>expected value</th></tr>
+<tr><td>2</td><td>(10, 6)</td><td>9.666666666666666</td></tr>
+<tr><td>3</td><td>(10, 10, 6)</td><td>10.166666666666666</td></tr>
+<tr><td>4</td><td>(12, 10, 10, 6)</td><td>10.472222222222221</td></tr>
+<tr><td>5</td><td>(12, 12, 10, 10, 6)</td><td>10.726851851851851</td></tr>
+<tr><td>6</td><td>(12, 12, 12, 10, 10, 6)</td><td>10.939043209876543</td></tr>
+<tr><td>7</td><td>(12, 12, 12, 12, 10, 10, 6)</td><td>11.115869341563785</td></tr>
+<tr><td>8</td><td>(12, 12, 12, 12, 12, 10, 10, 6)</td><td>11.263224451303156</td></tr>
+<tr><td>9</td><td>(12, 12, 12, 12, 12, 12, 10, 10, 6)</td><td>11.386020376085963</td></tr>
+<tr><td>10</td><td>(12, 12, 12, 12, 12, 12, 12, 10, 10, 6)</td><td>11.488350313404968</td></tr>
+</table>
+<h3>Expected values:</h3>
+<table class="info table">
+<tr><th>#dices</th><th>max</th><th>choose</th><th>sum</th></tr>
+<tr><td>1</td><td>8.66666666667</td><td>8.66666666667</td><td>8.66666666667</td>
+<tr><td>2</td><td>9.88888888889</td><td>9.66666666667</td><td>12.22222222222</td>
+<tr><td>3</td><td>10.51851851852</td><td>10.16666666667</td><td>15.72222222222</td>
+<tr><td>4</td><td>10.88580246914</td><td>10.47222222222</td><td>19.44444444444</td>
+<tr><td>5</td><td>11.12551440329</td><td>10.72685185185</td><td>23.14557613169</td>
+<tr><td>6</td><td>11.29621056241</td><td>10.93904320988</td><td>26.63888888889</td>
+<tr><td>7</td><td>11.42529721079</td><td>11.11586934156</td><td>30.00995941930</td>
+<tr><td>8</td><td>11.52674658970</td><td>11.26322445130</td><td>33.36375933547</td>
+<tr><td>9</td><td>11.60837874054</td><td>11.38602037609</td><td>36.69311199703</td>
+<tr><td>10</td><td>11.67500183904</td><td>11.48835031340</td><td>40.02134217980</td>
+</table>
+<h2>white dice</h2>
+Expected value: 5.5
+</body>
+</html>
+
