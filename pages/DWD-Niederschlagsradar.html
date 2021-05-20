@@ -47,17 +47,29 @@ function onKeyDown(event) {
    switch (event.key) {
       case 'Home':
       case 'ArrowUp':
+      case 'w':
          firstFrame();
          break;
       case 'End':
       case 'ArrowDown':
+      case 's':
          lastFrame();
          break;
       case 'ArrowLeft':
+      case 'a':
+      case 'j':
          prevFrame();
          break;
       case 'ArrowRight':
+      case 'd':
+      case 'l':
          nextFrame();
+         break;
+      case ' ':
+      case 'q':
+      case 'e':
+      case 'k':
+         toggleAnimation();
          break;
    }
 }
