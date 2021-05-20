@@ -8,6 +8,10 @@
 html, body {
    font-family: Arial;
 }
+
+table>tbody>tr>td+td {
+   padding-left: 1ex;
+}
    </style>
    <script>
 if ('registerElement' in document
@@ -142,11 +146,31 @@ function nextAnimationFrame() {
 <body>
    <h1>Niederschlagsradar</h1>
    <x-gif id="radargif" src="https://www.dwd.de/DWD/wetter/radar/radfilm_nrw_akt.gif" alt="Niederschlagsradar für Nordrhein-Westfalen" stopped></x-gif>
-   <input type="button" value="start" onclick="firstFrame();" />
-   <input type="button" value="prev" onclick="prevFrame();" />
-   <input type="button" value="play/pause" onclick="toggleAnimation();" />
-   <input type="button" value="next" onclick="nextFrame();" />
-   <input type="button" value="end" onclick="lastFrame();" />
+   <div>
+      <input type="button" value="start" onclick="firstFrame();" />
+      <input type="button" value="prev" onclick="prevFrame();" />
+      <input type="button" value="play/pause" onclick="toggleAnimation();" />
+      <input type="button" value="next" onclick="nextFrame();" />
+      <input type="button" value="end" onclick="lastFrame();" />
+   </div>
+   <hr />
+   <div>
+      <table>
+         <tr>
+            <th>action</th><th>keybinds</th>
+         </tr><tr>
+            <td>start</td><td>up, w, home</td>
+         </tr><tr>
+            <td>end</td><td>down, s, end</td>
+         </tr><tr>
+            <td>prev</td><td>left, a, j</td>
+         </tr><tr>
+            <td>next</td><td>right, d, l</td>
+         </tr><tr>
+            <td>play/pause</td><td>space, q, e, k</td>
+         </tr>
+      </table>
+   </div>
 </body>
 </html>
 
