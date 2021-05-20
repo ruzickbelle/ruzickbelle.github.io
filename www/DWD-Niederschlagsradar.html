@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <title>Niederschlagsradar</title>
+   <style>
+html, body {
+   font-family: Arial;
+}
+   </style>
+   <script>
+if ('registerElement' in document
+   && 'createShadowRoot' in HTMLElement.prototype
+   && 'import' in document.createElement('link')
+   && 'content' in document.createElement('template')) {
+   // We're using a browser with native WC support!
+} else {
+   document.write('<script src="https:\/\/cdnjs.cloudflare.com/ajax/libs/polymer/0.3.4/platform.js"><\/script>')
+}
+   </script>
+   <link rel="import" href="http://geelen.github.io/x-gif/dist/x-gif.html">
+   <script>
+"use strict";
+
+// Events
+var initTimeout = null;
+var playTimeout = null;
+var html_radargif;
+var html_radargifFrames;
+
+function onLoad() {
+   html_radargif = document.getElementById("radargif");
+}
+window.addEventListener('load', onLoad);
+
+function initialize() {
+   try {
+      html_radargifFrames = html_radargif.controller.playback.element;
+      if (html_radargifFrames !== undefined && html_radargifFrames !== null)
+         clearTimeout(initTimeout);
+   } catch (ex) {}
+}
+initTimeout = setInterval(initialize, 100);
+
+function onKeyDown(event) {
+   switch (event.key) {
+      case 'Home':
+      case 'ArrowUp':
+         firstFrame();
+         break;
+      case 'End':
+      case 'ArrowDown':
+         lastFrame();
+         break;
+      case 'ArrowLeft':
+         prevFrame();
+         break;
+      case 'ArrowRight':
+         nextFrame();
+         break;
+   }
+}
+window.addEventListener('keydown', onKeyDown);
+
+function getFrame() {
+   var frame = html_radargifFrames.getAttribute("data-frame");
+   if (frame == null)
+      return null;
+   else
+      return parseInt(frame);
+}
+
+function firstFrame() {
+   html_radargifFrames.setAttribute("data-frame", 0);
+}
+
+function lastFrame() {
+   html_radargifFrames.setAttribute("data-frame", 24);
+}
+
+function prevFrame() {
+   var frame = getFrame();
+   if (frame === null)
+      frame = 23;
+   else if (frame <= 0)
+      frame = 0;
+   else if (24 <= frame)
+      frame = 23;
+   else
+      frame--;
+   html_radargifFrames.setAttribute("data-frame", frame);
+}
+
+function nextFrame() {
+   var frame = getFrame();
+   if (frame === null)
+      frame = 0;
+   else if (frame <= 0)
+      frame = 1;
+   else if (24 <= frame)
+      frame = 24;
+   else
+      frame++;
+   html_radargifFrames.setAttribute("data-frame", frame);
+}
+
+function toggleAnimation() {
+   if (playTimeout === null) {
+      playTimeout = setInterval(nextAnimationFrame, 1000);
+   } else {
+      clearTimeout(playTimeout);
+      playTimeout = null;
+   }
+}
+
+function nextAnimationFrame() {
+   var frame = getFrame();
+   if (frame < 0)
+      frame = 0;
+   else if (25 <= frame)
+      frame = 0;
+   else
+      frame++;
+   html_radargifFrames.setAttribute("data-frame", frame);
+}
+   </script>
+</head>
+
+<body>
+   <h1>Niederschlagsradar</h1>
+   <x-gif id="radargif" src="https://www.dwd.de/DWD/wetter/radar/radfilm_nrw_akt.gif" alt="Niederschlagsradar für Nordrhein-Westfalen" stopped></x-gif>
+   <input type="button" value="start" onclick="firstFrame();" />
+   <input type="button" value="prev" onclick="prevFrame();" />
+   <input type="button" value="play/pause" onclick="toggleAnimation();" />
+   <input type="button" value="next" onclick="nextFrame();" />
+   <input type="button" value="end" onclick="lastFrame();" />
+</body>
+</html>
+
