@@ -11,7 +11,7 @@ div#status {
 }
 
 #configOuter {
-   position: absolute;
+   position: fixed;
    bottom: 0;
    right: 0;
    min-height: 2cm;
@@ -68,6 +68,7 @@ var html_configHint;
 var html_configInner;
 var html_configLeagueName;
 var html_configTournamentSlugName;
+var html_configTournamentStageName;
 var configHintTimer;
 
 async function onLoad() {
@@ -78,7 +79,9 @@ async function onLoad() {
    html_configInner = document.getElementById("configInner");
    html_configLeagueName = document.getElementById("configLeagueName");
    html_configTournamentSlugName = document.getElementById("configTournamentSlugName");
+   html_configTournamentStageName = document.getElementById("configTournamentStageName");
    var urlargs = parseURLArgs();
+   setConfig(urlargs);
    await loadStandings(urlargs);
    updateIndices();
    sortable("ul.group")[0].addEventListener('sortupdate', updateIndices);
@@ -89,10 +92,17 @@ window.addEventListener('load', onLoad);
 function parseURLArgs() {
    var argsStr = window.location.search.substr(1);
    if (argsStr === "")
-      return [];
-   var ret = argsStr.split("&");
-   for (var i in ret)
-      ret[i] = decodeURIComponent(ret[i]);
+      return {};
+   var argsArr = argsStr.split("&");
+   var ret = {};
+   for (var arg of argsArr) {
+      var keyValue = arg.split("=");
+      if (keyValue.length !== 2)
+         continue;
+      var key = keyValue[0];
+      var value = decodeURIComponent(keyValue[1]);
+      ret[key] = value;
+   }
    return ret;
 }
 
@@ -108,45 +118,51 @@ function showConfigHint() {
    configHintTimer = setTimeout(hideConfigHint, 5000);
 }
 
-function setConfig(leagueName, tournamentSlugName) {
-   if (html_configLeagueName.value === "" && leagueName !== null)
-      html_configLeagueName.value = leagueName;
-   if (html_configTournamentSlugName.value === "" && tournamentSlugName !== null)
-      html_configTournamentSlugName.value = tournamentSlugName;
+function setConfig(urlargs) {
+   if (html_configLeagueName.value === "" && urlargs.league)
+      html_configLeagueName.value = urlargs.league;
+   if (html_configTournamentSlugName.value === "" && urlargs.tournament)
+      html_configTournamentSlugName.value = urlargs.tournament;
+   if (html_configTournamentStageName.value === "" && urlargs.stage)
+      html_configTournamentStageName.value = urlargs.stage;
 }
 
 function submitConfig() {
    var configLeagueName = encodeURIComponent(html_configLeagueName.value.trim());
    var configTournamentSlugName = encodeURIComponent(html_configTournamentSlugName.value.trim());
+   var configTournamentStageName = encodeURIComponent(html_configTournamentStageName.value.trim());
    var argsStr;
-   if (configLeagueName === "") {
-      if (configTournamentSlugName === "")
-         argsStr = "";
-      else
-         argsStr = "LEC&" + configTournamentSlugName;
-   } else {
-      if (configTournamentSlugName === "")
-         argsStr = configLeagueName;
-      else
-         argsStr = configLeagueName + "&" + configTournamentSlugName;
+   if (configLeagueName === "")
+      argsStr = "";
+   else
+      argsStr = "league=" + configLeagueName;
+   if (configTournamentSlugName !== "") {
+      if (argsStr !== "")
+         argsStr += "&";
+      argsStr += "tournament=" + configTournamentSlugName;
+   }
+   if (configTournamentStageName !== "") {
+      if (argsStr !== "")
+         argsStr += "&";
+      argsStr += "stage=" + configTournamentStageName;
    }
    window.location.search = argsStr;
 }
 
-function logFormatted(level, color, ...args) {
-   console.log("%c" + level, "border-radius:2px;padding:0 4px;color:white;background:" + color + ";", ...args);
+function logFormatted(level, fgcolor, bgcolor, ...args) {
+   console.log("%c" + level, "border-radius:2px;padding:0 4px;color:" + fgcolor + ";background:" + bgcolor + ";", ...args);
 }
 
 function logInfo(...args) {
-   logFormatted("info", "green", ...args);
+   logFormatted("info", "white", "green", ...args);
 }
 
 function logWarning(...args) {
-   logFormatted("warn", "yellow", ...args);
+   logFormatted("warn", "black", "orange", ...args);
 }
 
 function logError(...args) {
-   logFormatted("error", "red", ...args);
+   logFormatted("error", "white", "red", ...args);
 }
 
 function setStatusPending(text) {
@@ -163,6 +179,24 @@ function setStatusError(text) {
 
 function setStatusHidden() {
    html_status.style.display = "none";
+}
+
+function joinObjKeys(list, key, filter) {
+   var ret = "";
+   var first = true;
+   for (var obj of list) {
+      if (filter !== undefined && !filter(obj))
+         continue;
+      var value = obj[key];
+      if (value.search(" ") !== -1)
+         value = '"' + value + '"';
+      if (first)
+         first = false;
+      else
+         ret += ", ";
+      ret += value;
+   }
+   return ret;
 }
 
 async function getLeagues() {
@@ -220,12 +254,16 @@ function getTournamentBySlugName(tournaments, tournamentSlugName) {
    return null;
 }
 
-async function findTournament(leagueId, tournamentSlugName) {
-   var tournaments = await getTournamentsForLeague(leagueId);
+function getTournament(tournaments, tournamentSlugName) {
    if (tournamentSlugName === null)
       return getTournamentLatest(tournaments);
    else
       return getTournamentBySlugName(tournaments, tournamentSlugName);
+}
+
+async function findTournament(leagueId, tournamentSlugName) {
+   var tournaments = await getTournamentsForLeague(leagueId);
+   return getTournament(tournaments, tournamentSlugName);
 }
 
 async function getStandings(tournamentId) {
@@ -240,6 +278,10 @@ async function getStandings(tournamentId) {
    });
    var data = await reply.json();
    return data.data.standings[0];
+}
+
+function isGroupStage(stage) {
+   return stage.type === "groups";
 }
 
 function createHTMLTeam(data) {
@@ -279,23 +321,31 @@ async function loadStandings(urlargs) {
    setStatusPending("Loading rankings...");
    var leagueName = "LEC";
    var tournamentSlugName = null;
-   if (0 < urlargs.length)
-      leagueName = urlargs[0];
-   if (1 < urlargs.length)
-      tournamentSlugName = urlargs[1];
-   setConfig(leagueName, tournamentSlugName);
-   logInfo("Creating page for config: leagueName=\"" + leagueName + "\", tournamentSlugName=\"" + tournamentSlugName + "\"");
-   var league = await findLeague(leagueName);
+   var tournamentStageName = null;
+   if (urlargs.league)
+      leagueName = urlargs.league;
+   if (urlargs.tournament)
+      tournamentSlugName = urlargs.tournament;
+   if (urlargs.stage)
+      tournamentStageName = urlargs.stage;
+   logInfo("Creating page for config: leagueName=\"" + leagueName + "\", tournamentSlugName=\"" + tournamentSlugName + "\", tournamentStageName=\"" + tournamentStageName + "\"");
+   var leagues = await getLeagues();
+   var league = getLeagueByName(leagues, leagueName);
    if (league === null) {
+      var validKeys = joinObjKeys(leagues, "name");
       logError("Could not find the target league.");
-      setStatusError("Could not find the target league!");
+      logInfo("Valid league names are: " + validKeys);
+      setStatusError("Could not find the target league! Valid league names are: " + validKeys);
       return;
    }
    logInfo("Found league: name=\"" + league.name + "\", slug=\"" + league.slug + "\", region=\"" + league.region + "\", id=" + league.id);
-   var tournament = await findTournament(league.id, tournamentSlugName);
+   var tournaments = await getTournamentsForLeague(league.id);
+   var tournament =  getTournament(tournaments, tournamentSlugName);
    if (tournament === null) {
+      var validKeys = joinObjKeys(tournaments, "slug");
       logError("Could not find the target tournament.");
-      setStatusError("Could not find the target tournament!");
+      logInfo("Valid tournament slug names are: " + validKeys);
+      setStatusError("Could not find the target tournament! Valid tournament slug names are: " + validKeys);
       return;
    }
    logInfo("Found tournament: slug=\"" + tournament.slug + "\", id=" + tournament.id);
@@ -307,7 +357,45 @@ async function loadStandings(urlargs) {
    }
    logInfo("Received standings.");
    setStatusHidden();
-   for (var section of standings.stages[0].sections) {
+   var found = false;
+   if (tournamentStageName === null) {
+      for (var stage of standings.stages) {
+         if (stage.type !== "groups")
+            continue;
+         found = true;
+         logInfo("Found stage: name=\"" + stage.name + "\", slug=\"" + stage.slug + "\", type=\"" + stage.type + "\"");
+         displayStandings(stage);
+      }
+   } else {
+      var notGroupsError = false;
+      for (var stage of standings.stages) {
+         if (stage.name !== tournamentStageName)
+            continue;
+         if (stage.type !== "groups")
+            notGroupsError = true;
+         found = true;
+         logInfo("Found stage: name=\"" + stage.name + "\", slug=\"" + stage.slug + "\", type=\"" + stage.type + "\"");
+         displayStandings(stage);
+      }
+      if (notGroupsError) {
+         var validKeys = joinObjKeys(standings.stages, "name", isGroupStage);
+         logWarning("The target tournament stage was not of type \"groups\" and probably contains no team rankings.");
+         logInfo("Valid group stage names are: " + validKeys);
+         setStatusError("The target tournament stage was not of type \"groups\" and probably contains no team rankings. Valid group stage names are: " + validKeys);
+         return;
+      }
+   }
+   if (!found) {
+      var validKeys = joinObjKeys(standings.stages, "name", isGroupStage);
+      logError("Could not find the target tournament stage.");
+      logInfo("Valid group stage names are: " + validKeys);
+      setStatusError("Could not find the target tournament stage! Valid group stage names are: " + validKeys);
+      return;
+   }
+}
+
+function displayStandings(stage) {
+   for (var section of stage.sections) {
       for (var rank of section.rankings) {
          for (var team of rank.teams) {
             var html_team = createHTMLTeam(team);
@@ -358,6 +446,12 @@ function updateIndices() {
                   <label for="configTournamentSlugName">Tournament Slug Name</label>
                </td><td>
                   <input type="text" id="configTournamentSlugName" />
+               </td>
+            </tr><tr>
+               <td>
+                  <label for="configTournamentStageName">Tournament Stage Name</label>
+               </td><td>
+                  <input type="text" id="configTournamentStageName" />
                </td>
             </tr>
          </table>
