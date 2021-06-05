@@ -242,10 +242,6 @@ async function getStandings(tournamentId) {
    return data.data.standings[0];
 }
 
-function getRegularSeasonRankings(standings) {
-   return standings.stages[0].sections[0].rankings;
-}
-
 function createHTMLTeam(data) {
    var html_li = document.createElement("li");
    var html_a = document.createElement("a");
@@ -311,11 +307,12 @@ async function loadStandings(urlargs) {
    }
    logInfo("Received standings.");
    setStatusHidden();
-   var rankings = getRegularSeasonRankings(standings);
-   for (var rank of rankings) {
-      for (var team of rank.teams) {
-         var html_team = createHTMLTeam(team);
-         html_group.appendChild(html_team);
+   for (var section of standings.stages[0].sections) {
+      for (var rank of section.rankings) {
+         for (var team of rank.teams) {
+            var html_team = createHTMLTeam(team);
+            html_group.appendChild(html_team);
+         }
       }
    }
 }
