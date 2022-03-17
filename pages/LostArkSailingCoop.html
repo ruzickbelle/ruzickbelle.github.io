@@ -9,6 +9,10 @@ html,body {
    font-family: Arial;
 }
 
+.container {
+   max-width: 30cm;
+}
+
 ol,ul {
    margin: 0;
 }
@@ -27,97 +31,108 @@ table.content>tbody>tr>td {
    font-weight: bold;
 }
 
-.verified {
+.questLink {
    color: black;
    text-decoration: none;
 }
 
-.uncertain {
-   color: black;
-   font-style: italic;
-   text-decoration: none;
+.quest {
+   width: max-content;
 }
 
-.unchecked {
-   color: #888;
-   font-style: italic;
-   text-decoration: none;
+.questTitle {
+}
+
+.questDescr {
+   padding-left: 1em;
 }
    </style>
 </head>
 
 <body>
+<div class="container">
 <h1>Lost Ark: Sailing Coop Missions</h1>
 <table class="content">
    <tr>
       <td class="heading">Region</td>
-      <td class="heading">Starting Mission</td>
-      <td class="heading">Additional Mission</td>
+      <td class="heading">Missions</td>
       <td class="heading">Sailing Coin</td>
       <td class="heading">Sailing Key</td>
       <td class="heading">Dangerous Waters</td>
    </tr><tr>
-      <td class="verified">Anikka</td>
-      <td><a href="https://lostarkcodex.com/us/quest/4002908/" target="_blank" class="verified">[Co-op] Catch Jellyfish!<br />Harpoon</a></td>
-      <td><a href="https://lostarkcodex.com/us/quest/4002941/" target="_blank" class="verified">[Co-op] Clean Up on Oil Four<br />Collect using Dragnet</a></td>
-      <td class="verified">Gienah's Coin</td>
-      <td class="verified">Key of Harmony</td>
-      <td class="verified">(safe)<br />Sandstorm Lv. 1<br />Dead Lv. 2</td>
+      <td>Anikka</td>
+      <td>
+         <div class="quest"><a href="https://lostarkcodex.com/us/quest/4002908/" target="_blank" class="questLink"><div class="questTitle">[Co-op] Catch Jellyfish!</div><div class="questDescr">Harpoon (safe)</div></a></div>
+         <div class="quest"><a href="https://lostarkcodex.com/us/quest/4002941/" target="_blank" class="questLink"><div class="questTitle">[Co-op] Clean Up on Oil Four</div><div class="questDescr">Collect using Dragnet (Sandstorm Lv. 1)</div></a></div>
+      </td>
+      <td>Gienah's Coin</td>
+      <td>Key of Harmony</td>
+      <td>Sandstorm Lv. 1<br />Dead Lv. 2</td>
    </tr><tr>
-      <td class="verified">Arthetine</td>
-      <td><a href="https://lostarkcodex.com/us/quest/4002912/" target="_blank" class="verified">[Co-op] Pull It Together<br />Treasure Salvaging</a></td>
-      <td><a href="https://lostarkcodex.com/us/quest/4002910/" target="_blank" class="verified">[Co-op] Catch Blue Marlin<br />Harpoon</a></td>
-      <td class="verified">Gienah's Coin</td>
-      <td class="verified">Key of Harmony</td>
-      <td class="verified">(safe)<br />Cold Lv. 2</td>
+      <td>Arthetine</td>
+      <td>
+         <div class="quest"><a href="https://lostarkcodex.com/us/quest/4002912/" target="_blank" class="questLink"><div class="questTitle">[Co-op] Pull It Together</div><div class="questDescr">Treasure Salvaging (safe)</div></a></div>
+         <div class="quest"><a href="https://lostarkcodex.com/us/quest/4002910/" target="_blank" class="questLink"><div class="questTitle">[Co-op] Catch Blue Marlin</div><div class="questDescr">Harpoon (Cold Lv. 2)</div></a></div>
+      </td>
+      <td>Gienah's Coin</td>
+      <td>Key of Harmony</td>
+      <td>Cold Lv. 2</td>
    </tr><tr>
-      <td class="verified">Vern</td>
-      <td><a href="https://lostarkcodex.com/us/quest/4002919/" target="_blank" class="verified">[Co-op] Stranded<br />Collect and Deliver</a></td>
-      <td><a href="https://lostarkcodex.com/us/quest/4002902/" target="_blank" class="uncertain">[Competitive] Storm Treasures<br />Treasure Salvaging</a></td>
-      <td class="verified">Gienah's Coin</td>
-      <td class="unchecked">Key of Harmony</td>
-      <td class="unchecked">(safe)<br />Dead Lv. 1<br />Cold Lv. 1</td>
+      <td>Vern</td>
+      <td>
+         <div class="quest"><a href="https://lostarkcodex.com/us/quest/4002919/" target="_blank" class="questLink"><div class="questTitle">[Co-op] Stranded</div><div class="questDescr">Collect and Deliver (safe)</div></a></div>
+         <div class="quest"><a href="https://lostarkcodex.com/us/quest/4002902/" target="_blank" class="questLink"><div class="questTitle">[Competitive] Storm Treasures</div><div class="questDescr">Treasure Salvaging (Storm Lv. 2)</div></a></div>
+      </td>
+      <td>Gienah's Coin</td>
+      <td>Key of Harmony</td>
+      <td>Sandstorm Lv. 1<br />Storm Lv. 2</td>
    </tr><tr>
-      <td class="verified">Rohendel</td>
-      <td><a href="https://lostarkcodex.com/us/quest/4002930/" target="_blank" class="verified">[Co-op] Stranded<br />Collect and Deliver</a></td>
-      <td><a href="https://lostarkcodex.com/us/quest/4002932/" target="_blank" class="verified">[Competitive] Storm Treasures<br />Treasure Salvaging</a></td>
-      <td class="verified">Sceptrum's Coin</td>
-      <td class="verified">Key of Wisdom</td>
-      <td class="verified">(safe)<br />Dead Lv. 2<br />Storm Lv. 3</td>
+      <td>Rohendel</td>
+      <td>
+         <div class="quest"><a href="https://lostarkcodex.com/us/quest/4002930/" target="_blank" class="questLink"><div class="questTitle">[Co-op] Stranded</div><div class="questDescr">Collect and Deliver (safe)</div></a></div>
+         <div class="quest"><a href="https://lostarkcodex.com/us/quest/4002932/" target="_blank" class="questLink"><div class="questTitle">[Competitive] Storm Treasures</div><div class="questDescr">Treasure Salvaging (Storm Lv. 3)</div></a></div>
+      </td>
+      <td>Sceptrum's Coin</td>
+      <td>Key of Wisdom</td>
+      <td>Dead Lv. 2<br />Storm Lv. 3</td>
    </tr><tr>
-      <td class="verified">Yorn</td>
-      <td><a href="https://lostarkcodex.com/us/quest/4002940/" target="_blank" class="verified">[Co-op] Pull It Together<br />Treasure Salvaging</a></td>
-      <td><a href="https://lostarkcodex.com/us/quest/4002941/" target="_blank" class="verified">[Co-op] Clean Up on Oil Four<br />Collect using Dragnet</a></td>
-      <td class="verified">Arcturus's Coin</td>
-      <td class="verified">Key of the Earth</td>
-      <td class="verified">(safe)<br />Sandstorm Lv. 3<br />Siren Lv. 3</td>
+      <td>Yorn</td>
+      <td>
+         <div class="quest"><a href="https://lostarkcodex.com/us/quest/4002940/" target="_blank" class="questLink"><div class="questTitle">[Co-op] Pull It Together</div><div class="questDescr">Treasure Salvaging (safe)</div></a></div>
+         <div class="quest"><a href="https://lostarkcodex.com/us/quest/4002941/" target="_blank" class="questLink"><div class="questTitle">[Co-op] Clean Up on Oil Four</div><div class="questDescr">Collect using Dragnet (Sandstorm Lv. 3)</div></a></div>
+      </td>
+      <td>Arcturus's Coin</td>
+      <td>Key of the Earth</td>
+      <td>Sandstorm Lv. 3<br />Siren Lv. 3</td>
    </tr><tr>
-      <td class="verified">Feiton</td>
-      <td><a href="https://lostarkcodex.com/us/quest/4002950/" target="_blank" class="verified">[Co-op] Catch Jellyfish!<br />Harpoon</a></td>
-      <td><a href="https://lostarkcodex.com/us/quest/4002951/" target="_blank" class="verified">[Co-op] Clean Up on Oil Four<br />Collect using Dragnet</a></td>
-      <td class="verified">Ancient Coin</td>
-      <td class="verified">Key of Endurance</td>
-      <td class="verified">Dead Lv. 4<br />Sandstorm Lv. 3<br />Cold Lv. 4</td>
+      <td>Feiton</td>
+      <td>
+         <div class="quest"><a href="https://lostarkcodex.com/us/quest/4002950/" target="_blank" class="questLink"><div class="questTitle">[Co-op] Catch Jellyfish!</div><div class="questDescr">Harpoon (Dead Lv. 4)</div></a></div>
+         <div class="quest"><a href="https://lostarkcodex.com/us/quest/4002951/" target="_blank" class="questLink"><div class="questTitle">[Co-op] Clean Up on Oil Four</div><div class="questDescr">Collect using Dragnet (Sandstorm Lv. 3)</div></a></div>
+      </td>
+      <td>Ancient Coin</td>
+      <td>Key of Endurance</td>
+      <td>Dead Lv. 4<br />Sandstorm Lv. 3<br />Cold Lv. 4</td>
    </tr><tr>
-      <td class="verified">Punika</td>
-      <td><a href="https://lostarkcodex.com/us/quest/4002962/" target="_blank" class="verified">[Co-op] Catch Jellyfish!<br />Harpoon</a></td>
-      <td><a href="https://lostarkcodex.com/us/quest/4002964/" target="_blank" class="verified">[Competitive] Storm Treasures<br />Treasure Salvaging</a></td>
-      <td class="verified">Sun Coin</td>
-      <td class="verified">Key of Guidance</td>
-      <td class="verified">Storm Lv. 4<br />Siren Lv. 4</td>
+      <td>Punika</td>
+      <td>
+         <div class="quest"><a href="https://lostarkcodex.com/us/quest/4002962/" target="_blank" class="questLink"><div class="questTitle">[Co-op] Catch Jellyfish!</div><div class="questDescr">Harpoon (Storm Lv. 4)</div></a></div>
+         <div class="quest"><a href="https://lostarkcodex.com/us/quest/4002961/" target="_blank" class="questLink"><div class="questTitle">[Co-op] Pull It Together</div><div class="questDescr">Treasure Salvaging (Sandstorm Lv. 3)</div></a></div>
+         <div class="quest"><a href="https://lostarkcodex.com/us/quest/4002964/" target="_blank" class="questLink"><div class="questTitle">[Competitive] Storm Treasures</div><div class="questDescr">Treasure Salvaging (Storm Lv. 4)</div></a></div>
+      </td>
+      <td>Sun Coin</td>
+      <td>Key of Guidance</td>
+      <td>Storm Lv. 4<br />Siren Lv. 4<br />Sandstorm Lv. 4</td>
    </tr>
 </table>
 <p><div>
-   Starting missions are clickable and link to the <a href="https://lostarkcodex.com/us/" target="_blank">Lost Ark Codex</a>. Values may be
-   <ul>
-      <li><span class="unchecked">unchecked</span> (grey, italic)</li>
-      <li><span class="uncertain">not 100% sure</span> (italic)</li>
-      <li><span class="verified">verified</span></li>
-   </ul>
-   Of these 7 possible events, only 6 spawn once every day. This table was originally based on <a href="https://re-actor.net/lost-ark-voyage-cooperative-missions-guide/" target="_blank">https://re-actor.net/lost-ark-voyage-cooperative-missions-guide/</a>.
+   Starting missions are clickable and link to the <a href="https://lostarkcodex.com/us/" target="_blank">Lost Ark Codex</a>. Of these 7 possible events, only 6 are scheduled in pairs of two at 19:30, 21:30 and 23:30 once every day. Each pair at one time consists of one event in the Sea of Gienah and one in the Sea of Procyon.
 </div></p><p>
+   This table was originally based on <a href="https://re-actor.net/lost-ark-voyage-cooperative-missions-guide/" target="_blank">https://re-actor.net/lost-ark-voyage-cooperative-missions-guide/</a>.
+</p><hr /><p>
    As a side note: When in Punika, do <a href="https://lostarkcodex.com/us/quest/1201109/" target="_blank">this quest line</a>.
 </p>
+</div>
 </body>
 </html>
 
