@@ -1,0 +1,52 @@
+html,
+body {
+   overflow: hidden;
+   margin: 0;
+   padding: 0;
+   height: 100vh;
+   width: 100vw;
+   color: lightgrey;
+   background-color: black;
+   font-family: Arial;
+   text-align: center;
+   vertical-align: middle;
+}
+
+.notice {
+   font-size: large;
+   font-weight: bold;
+}
+
+.emoji {
+   font-size: 70vw;
+}
+
+.banner {
+   width: auto;
+   font-family: Arial;
+   font-size: 5vw;
+   line-height: 100vh;
+}
+
+#board {
+   font-size: calc(4vh - 2px);
+   line-height: 0;
+   text-align: center;
+}
+
+#board > div {
+   height: 5vh;
+}
+
+#board > div > span {
+   display: inline-block;
+   margin: 1px;
+   height: calc(5vh - 2px);
+   width: calc(5vh - 2px);
+   line-height: calc(5vh - 2px);
+   vertical-align: middle;
+}
+
+.block {
+   color: black;
+}
