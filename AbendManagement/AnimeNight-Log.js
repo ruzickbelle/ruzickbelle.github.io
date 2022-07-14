@@ -37,7 +37,7 @@ const LISTDATA = Object.freeze({
 });
 
 // Library
-function createDOMElement(tag, className, content = null) {
+function createDOMElement(tag, className = null, content = null) {
    const html_element = document.createElement(tag);
    if (className) {
       html_element.className = className;
@@ -52,36 +52,111 @@ function createDOMElement(tag, className, content = null) {
    return html_element;
 }
 
-function createDOMHref(href, className, content = null) {
+function createDOMHref(href, className = null, content = null) {
    const html_a = createDOMElement('a', className, content);
    html_a.href = href;
    html_a.target = '_blank';
    return html_a;
 }
 
+function createDOMCheckbox(onClick, checked = false, className = null) {
+   const html_checkbox = createDOMElement('input', className);
+   html_checkbox.type = 'checkbox';
+   html_checkbox.checked = checked;
+   html_checkbox.addEventListener('click', onClick);
+   return html_checkbox;
+}
+
+function createDOMCheckboxLabel(text, onClick, checked = false, labelClassName = null, checkboxClassName = null) {
+   const html_checkbox = createDOMCheckbox(onClick, checked, checkboxClassName);
+   const html_label = createDOMElement('label', labelClassName, html_checkbox);
+   if (text) {
+      html_label.insertAdjacentText('beforeend', text);
+   }
+   return html_label;
+}
+
 // Main
 class LogEntry {
+   static _test() {
+      function assert(code, result, expected) {
+         if (result === expected) return;
+         throw new Error(`assertion failed: ${code} -> '${result}' (expected: '${expected}')`);
+      }
+      console.log('Testing LogEntry class...');
+      assert(
+         'new LogEntry(null, null, 1, 3, 5).formatEpisodes()',
+         new LogEntry(null, null, 1, 3, 5).formatEpisodes(),
+         '1, 3, 5',
+      );
+      assert(
+         'new LogEntry(null, null, 1, 2, 3).formatEpisodes()',
+         new LogEntry(null, null, 1, 2, 3).formatEpisodes(),
+         '1-3',
+      );
+      assert(
+         'new LogEntry(null, null, 1, 2, 3, 5, 7, 9, 10, 11).formatEpisodes()',
+         new LogEntry(null, null, 1, 2, 3, 5, 7, 9, 10, 11).formatEpisodes(),
+         '1-3, 5, 7, 9-11',
+      );
+      assert(
+         'new LogEntry(null, null, 1, 2, 4, 5, 7, 8, 10, 12, 13).formatEpisodes()',
+         new LogEntry(null, null, 1, 2, 4, 5, 7, 8, 10, 12, 13).formatEpisodes(),
+         '1-2, 4-5, 7-8, 10, 12-13',
+      );
+      assert(
+         'new LogEntry(null, null, 1, 101, 201, 202, 301, 401, 402, 403, 501, 601, 602, 603, 604, 701, 702).formatEpisodes()',
+         new LogEntry(
+            null,
+            null,
+            1,
+            101,
+            201,
+            202,
+            301,
+            401,
+            402,
+            403,
+            501,
+            601,
+            602,
+            603,
+            604,
+            701,
+            702,
+         ).formatEpisodes(),
+         '1, 101, 201-202, 301, 401-403, 501, 601-604, 701-702',
+      );
+      console.log('LogEntry class test completed.');
+   }
+
    constructor(date, show, ...episodes) {
       this.date = date;
       this.show = show;
       this.episodes = episodes;
    }
 
+   formatEpisodeRange(start, end) {
+      return start === end ? `${start}` : `${start}-${end}`;
+   }
+
    formatEpisodes() {
-      const episodes = [];
-      var rangeStart = null;
-      var rangePrev = null;
-      this.episodes.forEach((episode) => {
-         if (rangeStart === null || rangePrev === null) {
-            rangeStart = episode;
-            rangePrev = episode;
-         } else if (rangePrev + 1 === episode) {
-            rangePrev = episode;
-         } else if (rangePrev === rangeStart) {
-            // TODO
+      const episodeRanges = [];
+      var start = Number.NaN;
+      var prev = Number.NaN;
+      this.episodes.forEach((cur) => {
+         if (prev + 1 !== cur) {
+            if (!Number.isNaN(start)) {
+               episodeRanges.push(this.formatEpisodeRange(start, prev));
+            }
+            start = cur;
          }
+         prev = cur;
       });
-      return this.episodes.join(', ');
+      if (!Number.isNaN(start)) {
+         episodeRanges.push(this.formatEpisodeRange(start, prev));
+      }
+      return episodeRanges.join(', ');
    }
 
    createDOMElement() {
@@ -100,26 +175,16 @@ class PageController {
       this.reverseList = window.location.hash === '#reverse';
    }
 
-   createDOMReverseListCheckbox() {
-      const html_checkbox = document.createElement('input');
-      html_checkbox.type = 'checkbox';
-      html_checkbox.checked = this.reverseList;
-      html_checkbox.addEventListener('click', this.handleToggleReverseList);
-      return html_checkbox;
-   }
-
-   createDOMReverseListLabel(text = null) {
-      const html_label = document.createElement('label');
-      html_label.appendChild(this.createDOMReverseListCheckbox());
-      if (text) {
-         html_label.insertAdjacentText('beforeend', text);
-      }
-      return html_label;
-   }
-
    createDOMHeadings() {
       const html_tr = document.createElement('tr');
-      html_tr.appendChild(createDOMElement('th', 'date dateHeading', this.createDOMReverseListLabel('Date')));
+      const html_date = createDOMCheckboxLabel(
+         'Date',
+         this.handleToggleReverseList,
+         this.reverseList,
+         null,
+         'reverseListCheckbox',
+      );
+      html_tr.appendChild(createDOMElement('th', 'date dateHeading', html_date));
       html_tr.appendChild(createDOMElement('th', 'showName showNameHeading', 'Show'));
       html_tr.appendChild(createDOMElement('th', 'showSeason showSeasonHeading', 'Season'));
       html_tr.appendChild(createDOMElement('th', 'episodes episodesHeading', 'Episodes'));
@@ -158,6 +223,10 @@ class PageController {
          html_tbody.appendChild(html_entry);
       });
    }
+}
+
+function _test() {
+   LogEntry._test();
 }
 
 // Events
