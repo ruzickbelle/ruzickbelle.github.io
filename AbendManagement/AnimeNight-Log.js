@@ -22,6 +22,12 @@ const LISTDATA = Object.freeze({
          url: 'https://beta.crunchyroll.com/series/GRVD0ZDQR/the-god-of-high-school',
          season: '1',
       },
+      PromisedNeverlandS01: {
+         name: 'The Promised Neverland',
+         url: 'https://beta.crunchyroll.com/series/GYVD2K1WY/the-promised-neverland',
+         url2: 'https://www.netflix.com/title/81145640',
+         season: '1',
+      },
    },
    entries: [
       ['2022-06-21', 'LoveOfKillS01', 1, 2, 3],
@@ -31,8 +37,10 @@ const LISTDATA = Object.freeze({
       ['2022-07-05', 'LoveOfKillS01', 4, 5],
       ['2022-07-13', 'AriaScarletAmmoS01', 4, 5, 6],
       ['2022-07-13', 'LoveOfKillS01', 6],
-      ['', 'RealistHeroRebuiltKingdomS01', 4, 5, 6],
+      ['2022-07-22', 'RealistHeroRebuiltKingdomS01', 4, 5, 6],
+      ['2022-07-22', 'PromisedNeverlandS01', 1],
       ['', 'GodOfHighSchoolS01', 4, 5, 6],
+      ['', 'PromisedNeverlandS01', 2, 3],
    ],
 });
 
@@ -163,7 +171,13 @@ class LogEntry {
       const html_tr = document.createElement('tr');
       html_tr.appendChild(createDOMElement('td', 'date dateEntry', this.date));
       const html_show = this.show.url ? createDOMHref(this.show.url, 'showHref', this.show.name) : this.show.name;
-      html_tr.appendChild(createDOMElement('td', 'showName showNameEntry', html_show));
+      const html_showName = createDOMElement('td', 'showName showNameEntry', html_show);
+      if (this.show.url2) {
+         html_showName.innerHTML += '&nbsp;(';
+         html_showName.appendChild(createDOMHref(this.show.url2, 'showHref', 'alt'));
+         html_showName.appendChild(document.createTextNode(')'));
+      }
+      html_tr.appendChild(html_showName);
       html_tr.appendChild(createDOMElement('td', 'showSeason showSeasonEntry', this.show.season));
       html_tr.appendChild(createDOMElement('td', 'episodes episodesEntry', this.formatEpisodes()));
       return html_tr;
