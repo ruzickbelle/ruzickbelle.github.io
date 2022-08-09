@@ -10,7 +10,6 @@ const LISTDATA = Object.freeze({
       },
       AriaScarletAmmoS01: {
          name: 'Aria the Scarlet Ammo',
-         url: 'https://192.168.178.29/public/Videos/AriaTheScarletAmmo/',
          season: '1',
       },
       RealistHeroRebuiltKingdomS01: {
@@ -43,6 +42,8 @@ const LISTDATA = Object.freeze({
       ['2022-07-27', 'PromisedNeverlandS01', 4, 5, 6],
       ['2022-07-28', 'GodOfHighSchoolS01', 4, 5, 6],
       ['2022-07-31', 'PromisedNeverlandS01', 7, 8, 9],
+      ['2022-08-09', 'LoveOfKillS01', 7, 8, 9],
+      ['2022-08-09', 'RealistHeroRebuiltKingdomS01', 7],
    ],
 });
 
