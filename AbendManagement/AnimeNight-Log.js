@@ -28,6 +28,10 @@ const LISTDATA = Object.freeze({
          url2: 'https://www.netflix.com/title/81145640',
          season: '1',
       },
+      MiraiNikkiS01: {
+         name: 'Mirai Nikki',
+         season: '1',
+      },
    },
    entries: [
       ['2022-06-21', 'LoveOfKillS01', 1, 2, 3],
@@ -45,6 +49,7 @@ const LISTDATA = Object.freeze({
       ['2022-08-09', 'LoveOfKillS01', 7, 8, 9],
       ['2022-08-09', 'RealistHeroRebuiltKingdomS01', 7],
       ['2022-08-11', 'AriaScarletAmmoS01', 7, 8, 9],
+      ['2022-08-18', 'MiraiNikkiS01', 1, 2],
    ],
 });
 
