@@ -50,6 +50,7 @@ const LISTDATA = Object.freeze({
       ['2022-08-09', 'RealistHeroRebuiltKingdomS01', 7],
       ['2022-08-11', 'AriaScarletAmmoS01', 7, 8, 9],
       ['2022-08-18', 'MiraiNikkiS01', 1, 2],
+      ['2022-08-25', 'PromisedNeverlandS01', 10, 11, 12],
    ],
 });
 
