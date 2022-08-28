@@ -27,10 +27,12 @@ const LISTDATA = Object.freeze({
          url: 'https://beta.crunchyroll.com/series/GYVD2K1WY/the-promised-neverland',
          url2: 'https://www.netflix.com/title/81145640',
          season: '1',
+         filter: true,
       },
       MiraiNikkiS01: {
          name: 'Mirai Nikki',
          season: '1',
+         filter: true,
       },
    },
    entries: [
@@ -51,6 +53,7 @@ const LISTDATA = Object.freeze({
       ['2022-08-11', 'AriaScarletAmmoS01', 7, 8, 9],
       ['2022-08-18', 'MiraiNikkiS01', 1, 2],
       ['2022-08-25', 'PromisedNeverlandS01', 10, 11, 12],
+      ['2022-08-28', 'RealistHeroRebuiltKingdomS01', 8, 9],
    ],
 });
 
@@ -160,8 +163,8 @@ class LogEntry {
 
    formatEpisodes() {
       const episodeRanges = [];
-      var start = Number.NaN;
-      var prev = Number.NaN;
+      let start = Number.NaN;
+      let prev = Number.NaN;
       this.episodes.forEach((cur) => {
          if (prev + 1 !== cur) {
             if (!Number.isNaN(start)) {
@@ -177,7 +180,10 @@ class LogEntry {
       return episodeRanges.join(', ');
    }
 
-   createDOMElement() {
+   createDOMElement(showFilter) {
+      if (showFilter && this.show.filter) {
+         return null;
+      }
       const html_tr = document.createElement('tr');
       html_tr.appendChild(createDOMElement('td', 'date dateEntry', this.date));
       const html_show = this.show.url ? createDOMHref(this.show.url, 'showHref', this.show.name) : this.show.name;
@@ -196,7 +202,9 @@ class LogEntry {
 
 class PageController {
    constructor() {
-      this.reverseList = window.location.hash === '#reverse';
+      this.reverseList = false;
+      this.showFilter = false;
+      this.loadLocationHash();
    }
 
    createDOMHeadings() {
@@ -208,8 +216,15 @@ class PageController {
          null,
          'reverseListCheckbox',
       );
+      const html_show = createDOMCheckboxLabel(
+         'Show',
+         this.handleToggleShowFilter,
+         this.showFilter,
+         null,
+         'showFilterCheckbox',
+      );
       html_tr.appendChild(createDOMElement('th', 'date dateHeading', html_date));
-      html_tr.appendChild(createDOMElement('th', 'showName showNameHeading', 'Show'));
+      html_tr.appendChild(createDOMElement('th', 'showName showNameHeading', html_show));
       html_tr.appendChild(createDOMElement('th', 'showSeason showSeasonHeading', 'Season'));
       html_tr.appendChild(createDOMElement('th', 'episodes episodesHeading', 'Episodes'));
       return html_tr;
@@ -226,9 +241,32 @@ class PageController {
       return logEntries;
    }
 
+   loadLocationHash() {
+      const configs = window.location.hash.replace(/^#/, '').split('&');
+      this.reverseList = configs.includes('reverse');
+      this.showFilter = configs.includes('filter');
+   }
+
+   updateLocationHash() {
+      const configs = [];
+      if (this.reverseList) {
+         configs.push('reverse');
+      }
+      if (this.showFilter) {
+         configs.push('filter');
+      }
+      window.location.hash = configs.join('&');
+   }
+
    handleToggleReverseList = (event) => {
       this.reverseList = event.target.checked;
-      window.location.hash = this.reverseList ? '#reverse' : '#normal';
+      this.updateLocationHash();
+      this.redraw();
+   };
+
+   handleToggleShowFilter = (event) => {
+      this.showFilter = event.target.checked;
+      this.updateLocationHash();
       this.redraw();
    };
 
@@ -243,8 +281,10 @@ class PageController {
       html_tbody.appendChild(this.createDOMHeadings());
 
       this.getLogEntries().forEach((entry) => {
-         const html_entry = entry.createDOMElement();
-         html_tbody.appendChild(html_entry);
+         const html_entry = entry.createDOMElement(this.showFilter);
+         if (html_entry) {
+            html_tbody.appendChild(html_entry);
+         }
       });
    }
 }
