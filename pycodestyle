@@ -1,0 +1,11 @@
+[pycodestyle]
+max_line_length = 4096
+ignore = "E401,E402,E24,W50,W690"
+# sel chg E226 - Fix missing whitespace around arithmetic operator.
+# ign chg E401 - Put imports on separate lines. (includes E402)
+# ign chg E402 - Fix module level import not at top of file.
+# ign def E24  - ???
+# ign def W50  - ???
+# sel def W391 - Remove trailing blank lines.
+# ign def W690 - Fix various deprecated code (via lib2to3).
+
